@@ -1,4 +1,4 @@
-package Group::Git::Cmd::Ivan;
+package Group::Git::Cmd::Tag;
 
 # Created on: 2013-05-10 07:05:17
 # Create by:  Ivan Wills
@@ -15,13 +15,41 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use File::chdir;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
+sub tag {
+    my ($self) = @_;
 
+    my $tag = shift @ARGV;
+
+    for my $name (sort keys %{ $self->repos }) {
+        my $repo = $self->repos->{$name};
+
+        next if !-d $name;
+        local $CWD = $name;
+        my @tags = map { chomp; $_ } `git tag`;
+
+        print "\n$name\n";
+        if ( !$tag ) {
+            my %logs
+                = map {
+                    chomp;
+                    (split /\s[(]/, $_)
+                }
+                grep {
+                    /[(]/
+                }
+                `git log --format=format:'%h %d'`;
+
+            print map { chop $logs{$_}; "$_ $logs{$_}\n" } keys %logs;
+        }
+    }
+}
 
 1;
 
@@ -29,16 +57,16 @@ __END__
 
 =head1 NAME
 
-Group::Git::Cmd::Ivan - <One-line description of module's purpose>
+Group::Git::Cmd::Tag - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Ivan version 0.0.1
+This documentation refers to Group::Git::Cmd::Tag version 0.0.1
 
 
 =head1 SYNOPSIS
 
-   use Group::Git::Cmd::Ivan;
+   use Group::Git::Cmd::Tag;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
