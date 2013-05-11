@@ -32,22 +32,54 @@ sub tag {
 
         next if !-d $name;
         local $CWD = $name;
-        my @tags = map { chomp; $_ } `git tag`;
+        my %tags
+            = map {
+                $_=>1
+            }
+            map {
+                chomp;
+                $_
+            }
+            `git tag`;
+        my %branches
+            = map {
+                $_=>1
+            }
+            map {
+                s/^.*\s//;
+                (split /,\s+/, $_)
+            }
+            `git branch`;
 
         print "\n$name\n";
-        if ( !$tag ) {
-            my %logs
-                = map {
-                    chomp;
-                    (split /\s[(]/, $_)
-                }
-                grep {
-                    /[(]/
-                }
-                `git log --format=format:'%h %d'`;
 
-            print map { chop $logs{$_}; "$_ $logs{$_}\n" } keys %logs;
+        my %logs
+            = map {
+                chomp;
+                my ($hash, $blt) = split /\s[(]/, $_;
+                chop $blt;
+               ( $hash => join ', ', grep { $tags{$_} } split /,\s+/, $blt )
+            }
+            grep {
+                /[(]/
+            }
+            `git log --format=format:'%h %d'`;
+
+        print map {
+            "$_ $logs{$_}\n"
         }
+        grep {
+            $logs{$_} && ( $tag ? $logs{$_} =~ /$tag/ : 1 )
+        }
+        sort {
+            my $A = $logs{$a};
+            my $B = $logs{$b};
+            $A =~ s/(\d+)/sprintf '%06d', $1/eg;
+            $B =~ s/(\d+)/sprintf '%06d', $1/eg;
+            $A cmp $B
+        }
+        keys %logs;
+
     }
 }
 
