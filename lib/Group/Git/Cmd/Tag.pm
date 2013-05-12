@@ -53,12 +53,14 @@ sub tag {
 
         print "\n$name\n";
 
+        my $count = 0;
         my %logs
             = map {
                 chomp;
                 my ($hash, $blt) = split /\s[(]/, $_;
                 chop $blt;
-               ( $hash => join ', ', grep { $tags{$_} } split /,\s+/, $blt )
+                my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
+               ( $hash => $tag ? $tag . ' (' . $count++ . ')' : '' )
             }
             grep {
                 /[(]/
