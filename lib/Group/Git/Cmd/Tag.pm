@@ -23,66 +23,70 @@ our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
 sub tag {
-    my ($self) = @_;
+    my ($self, $name) = @_;
+    return unless -d $name;
 
     my $tag = shift @ARGV;
 
-    for my $name (sort keys %{ $self->repos }) {
-        my $repo = $self->repos->{$name};
+    my $repo = $self->repos->{$name};
 
-        next if !-d $name;
-        local $CWD = $name;
-        my %tags
-            = map {
-                $_=>1
-            }
-            map {
-                chomp;
-                $_
-            }
-            `git tag`;
-        my %branches
-            = map {
-                $_=>1
-            }
-            map {
-                s/^.*\s//;
-                (split /,\s+/, $_)
-            }
-            `git branch`;
+    local $CWD = $name;
+    my %tags
+        = map {
+            $_=>1
+        }
+        map {
+            chomp;
+            $_
+        }
+        `git tag`;
+    my %branches
+        = map {
+            $_=>1
+        }
+        map {
+            s/^.*\s//;
+            (split /,\s+/, $_)
+        }
+        `git branch`;
 
-        print "\n$name\n";
+    my $count = 0;
+    my %logs
+        = map {
+            chomp;
+            my ($hash, $blt) = split /\s[(]/, $_;
+            $blt ||= '';
+            chop $blt;
+            my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
+            $count++;
+           ( $hash => $tag ? $tag . " ($count)" : '' )
+        }
+        `git log --format=format:'%h %d'`;
 
-        my $count = 0;
-        my %logs
-            = map {
-                chomp;
-                my ($hash, $blt) = split /\s[(]/, $_;
-                chop $blt;
-                my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
-               ( $hash => $tag ? $tag . ' (' . $count++ . ')' : '' )
-            }
-            grep {
-                /[(]/
-            }
-            `git log --format=format:'%h %d'`;
-
-        print map {
-            "$_ $logs{$_}\n"
+    %logs
+        = map {
+            ( $_ => $logs{$_} );
         }
         grep {
             $logs{$_} && ( $tag ? $logs{$_} =~ /$tag/ : 1 )
         }
-        sort {
-            my $A = $logs{$a};
-            my $B = $logs{$b};
-            $A =~ s/(\d+)/sprintf '%06d', $1/eg;
-            $B =~ s/(\d+)/sprintf '%06d', $1/eg;
-            $A cmp $B
-        }
         keys %logs;
 
+    return unless %logs;
+
+    print map {
+        "$_ $logs{$_}\n"
     }
+    sort {
+        my $A = $logs{$a};
+        my $B = $logs{$b};
+        $A =~ s/(\d+)/sprintf '%06d', $1/eg;
+        $B =~ s/(\d+)/sprintf '%06d', $1/eg;
+        $A cmp $B
+    }
+    keys %logs;
+
+    return;
 }
 
 1;
