@@ -50,5 +50,5 @@ TODO: {
     );
 }
 
-module_boilerplate_ok('Group-Git-Cmd-Ivan/t/boilerplate.t');
+module_boilerplate_ok('lib/Group/Git/Cmd/Ivan.pm');
 
