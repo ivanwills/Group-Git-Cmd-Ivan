@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 1 + 1;
+use Test::More;
 use Path::Class;
 
 my $lib = file($0)->parent->parent->subdir('lib');
