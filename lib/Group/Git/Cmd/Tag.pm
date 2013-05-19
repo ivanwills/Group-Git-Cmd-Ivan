@@ -16,6 +16,7 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
+use Term::ANSIColor qw/colored/;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -50,7 +51,8 @@ sub tag {
         }
         `git branch`;
 
-    my $count = 0;
+    my $count  = 0;
+    my $tagged = 0;
     my %logs
         = map {
             chomp;
@@ -59,7 +61,7 @@ sub tag {
             chop $blt;
             my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
             $count++;
-           ( $hash => $tag ? $tag . " ($count)" : '' )
+           ( $hash => $tag ? $tag . colored(" ($count)", $tagged++ ? '' : 'green' ) : '' )
         }
         `git log --format=format:'%h %d'`;
 
