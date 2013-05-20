@@ -16,24 +16,15 @@ use File::chdir;
 
 our $VERSION     = version->new('0.0.1');
 
-sub build {
-    my ($self, $name) = @_;
+sub build { shift->_builder( 'builder', 'Build.PL', @_ ) }
+sub mvn   { shift->_builder( 'mvn'    , 'pom.xml' , @_ ) }
+sub _builder {
+    my ($self, $cmd, $test, $name) = @_;
 
     return unless -d $name;
     local $CWD = $name;
-    warn "Have dir $name\n";
 
-    if ( -f "Build.PL" ) {
-    warn "PERL\n";
-        system 'builder', @ARGV;
-    }
-    elsif ( -f "pom.xml" ) {
-    warn "JAVA\n";
-        system 'mvn', @ARGV;
-    }
-    else {
-        warn "UNKNOWN\n";
-    }
+    system $cmd, @ARGV if -f $test;
 
     return;
 }
