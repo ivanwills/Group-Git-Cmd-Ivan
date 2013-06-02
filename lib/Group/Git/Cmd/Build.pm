@@ -22,11 +22,13 @@ sub _builder {
     my ($self, $cmd, $test, $name) = @_;
 
     return unless -d $name;
+    return unless -f $test;
+
     local $CWD = $name;
 
-    system $cmd, @ARGV if -f $test;
+    $cmd .= ' ' . join ' ', @ARGV;
 
-    return;
+    return `$cmd`;
 }
 
 1;

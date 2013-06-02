@@ -76,7 +76,7 @@ sub tag {
 
     return unless %logs;
 
-    print map {
+    return join '', map {
         "$_ $logs{$_}\n"
     }
     sort {
@@ -87,8 +87,6 @@ sub tag {
         $A cmp $B
     }
     keys %logs;
-
-    return;
 }
 
 1;
