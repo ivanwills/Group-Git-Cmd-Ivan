@@ -26,7 +26,7 @@ sub _builder {
 
     local $CWD = $name;
 
-    $cmd .= ' ' . join ' ', @ARGV;
+    $cmd .= ' ' . join ' ', map { $self->shell_quote } @ARGV;
 
     return `$cmd`;
 }
