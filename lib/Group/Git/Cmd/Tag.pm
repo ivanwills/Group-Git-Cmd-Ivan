@@ -84,7 +84,7 @@ sub tag {
         my $B = $logs{$b};
         $A =~ s/(\d+)/sprintf '%06d', $1/eg;
         $B =~ s/(\d+)/sprintf '%06d', $1/eg;
-        $A cmp $B
+        $B cmp $A
     }
     keys %logs;
 }
