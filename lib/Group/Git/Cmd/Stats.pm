@@ -12,7 +12,8 @@ use Moose::Role;
 use Carp;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use DateTime::Format::Strftime qw/strptime/;
+use DateTime::Format::Strptime qw/strptime/;
+use File::chdir;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -29,14 +30,31 @@ sub stats {
     my ($self, $name) = @_;
 
     return unless -d $name;
+    local $CWD = $name;
 
     my $cmd = qq{git log --format=format:' %h|%s|%an|%ci'};
     my @commits = `$cmd`;
+    my %stats;
 
     for my $commit (@commits) {
         my ($hash, $subject, $user, $time) = split /[|]/, $commit;
         $time = $strp->parse_datetime($time);
+        my $stat = $time->clone;
+        $stat->truncate( to => 'month' );
+        push @{$stats{$stat}}, {
+            hash => $hash,
+            subject => $subject,
+            user    => $user,
+            time    => $time,
+        };
     }
+
+    my $out = '';
+    for my $stat ( sort keys %stats ) {
+        $out .= sprintf "%s\t%d\n", $stat, scalar @{ $stats{$stat} };
+    }
+
+    return $out;
 }
 
 1;
