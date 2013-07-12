@@ -44,6 +44,8 @@ my %global;
 sub stats {
     my ($self, $name) = @_;
 
+    $opt->process if !%{ $opt->opt || {} };
+
     return unless -d $name;
     local $CWD = $name;
 
@@ -55,7 +57,7 @@ sub stats {
         my ($hash, $subject, $user, $time) = split /[|]/, $commit;
         $time = $strp->parse_datetime($time);
         my $stat = $time->clone;
-        $stat->truncate( to => 'month' );
+        $stat->truncate( to => $opt->opt->bin );
         push @{$stats{$stat}}, {
             hash => $hash,
             subject => $subject,
