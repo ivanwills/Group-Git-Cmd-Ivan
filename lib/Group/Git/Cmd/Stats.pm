@@ -14,17 +14,32 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use DateTime::Format::Strptime qw/strptime/;
 use File::chdir;
+use Getopt::Alt;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
-my $strp = new DateTime::Format::Strptime(
+my $strp = DateTime::Format::Strptime->new(
     pattern   => '%F %T %z',
     locale    => 'en_AU',
     time_zone => 'Australia/Sydney',
 );
+my $opt = Getopt::Alt->new(
+    {
+        bundle      => 1,
+        help        => 1,
+        ignore_case => 0,
+        default     => {
+            bin => 'month'
+        },
+    },
+    [
+        'bin|b=s',
+    ]
+);
+my %global;
 
 sub stats {
     my ($self, $name) = @_;
@@ -47,11 +62,24 @@ sub stats {
             user    => $user,
             time    => $time,
         };
+        $global{ $stat } ||= {};
+        $global{ $stat }{count}++;
     }
 
     my $out = '';
     for my $stat ( sort keys %stats ) {
         $out .= sprintf "%s\t%d\n", $stat, scalar @{ $stats{$stat} };
+    }
+
+    return $out;
+}
+
+sub stats_end {
+    my ($self) = @_;
+    my $out = "\nTotal\n";
+
+    for my $stat ( sort keys %global ) {
+        $out .= sprintf "%s\t%d\n", $stat, $global{$stat}{count};
     }
 
     return $out;
