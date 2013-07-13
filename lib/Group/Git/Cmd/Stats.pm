@@ -44,10 +44,10 @@ my %global;
 sub stats {
     my ($self, $name) = @_;
 
-    $opt->process if !%{ $opt->opt || {} };
-
     return unless -d $name;
     local $CWD = $name;
+
+    $opt->process if !%{ $opt->opt || {} };
 
     my $cmd = qq{git log --format=format:' %h|%s|%an|%ci'};
     my @commits = `$cmd`;
@@ -78,6 +78,9 @@ sub stats {
 
 sub stats_end {
     my ($self) = @_;
+
+    return if !%{ $opt->opt || {} };
+
     my $out = "\nTotal\n";
 
     for my $stat ( sort keys %global ) {
