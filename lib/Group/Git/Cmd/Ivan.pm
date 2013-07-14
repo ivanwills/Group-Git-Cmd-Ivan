@@ -10,9 +10,6 @@ use strict;
 use version;
 use Moose::Role;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 

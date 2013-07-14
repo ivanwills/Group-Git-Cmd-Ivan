@@ -8,7 +8,12 @@ my $builder = Module::Build->new(
     dist_author       => 'Ivan Wills <ivan.wills@gmail.com>',
     dist_version_from => 'lib/Group/Git/Cmd/Ivan.pm',
     requires          => {
-        'perl'             => 5.008,
+        'perl'                       => 5.008,
+        'DateTime::Format::Strptime' => 0,
+        'File::chdir'                => 0,
+        'Getopt::Alt'                => '0.1.1',
+        'Moose::Role'                => 0,
+        'version'                    => 0,
     },
     configure_requires => {
         'Module::Build' => 0.38,
