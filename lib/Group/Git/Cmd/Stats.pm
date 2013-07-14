@@ -29,7 +29,7 @@ my $strp = DateTime::Format::Strptime->new(
 my $opt = Getopt::Alt->new(
     {
         bundle      => 1,
-        help        => 1,
+        help        => __PACKAGE__,
         ignore_case => 0,
         default     => {
             bin => 'month'
