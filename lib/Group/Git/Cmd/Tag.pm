@@ -14,15 +14,27 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 use Term::ANSIColor qw/colored/;
+use Getopt::Alt;
 
-our $VERSION     = version->new('0.0.1');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.0.1');
+
+my $opt = Getopt::Alt->new(
+    {
+        bundle      => 1,
+        help        => __PACKAGE__,
+        ignore_case => 0,
+    },
+    [
+        'min|m',
+        'verbose|v+',
+    ]
+);
 
 sub tag {
     my ($self, $name) = @_;
     return unless -d $name;
+
+    $opt->process if !%{ $opt->opt || {} };
 
     my $tag = shift @ARGV;
 
@@ -58,7 +70,15 @@ sub tag {
             chop $blt;
             my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
             $count++;
-           ( $hash => $tag ? $tag . colored(" ($count)", $tagged++ ? '' : 'green' ) : '' )
+            my $min = !$tagged++;
+            #warn "$name\t$count\n" if $min;
+
+            if ($min) {
+                return ( $hash => $tag ? $tag . colored(" ($count)", 'green' ) : '' );
+            }
+            return () if !$opt->opt->min;
+
+            return ( $hash => $tag ? "$tag ($count)" : '' )
         }
         `git log --format=format:'%h %d'`;
 
