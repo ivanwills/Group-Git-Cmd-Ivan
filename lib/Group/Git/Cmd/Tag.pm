@@ -62,6 +62,7 @@ sub tag {
 
     my $count  = 0;
     my $tagged = 0;
+    system "git log --format=format:'%h %d'";
     my %logs
         = map {
             chomp;
@@ -71,7 +72,7 @@ sub tag {
             my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
             $count++;
             my $min = !$tagged++;
-            #warn "$name\t$count\n" if $min;
+            warn "$name\t$count\n" if $min;
 
             if ($min) {
                 return ( $hash => $tag ? $tag . colored(" ($count)", 'green' ) : '' );
