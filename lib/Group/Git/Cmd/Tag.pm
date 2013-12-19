@@ -62,7 +62,6 @@ sub tag {
 
     my $count  = 0;
     my $tagged = 0;
-    system "git log --format=format:'%h %d'";
     my %logs
         = map {
             chomp;
