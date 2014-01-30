@@ -62,25 +62,23 @@ sub tag {
 
     my $count  = 0;
     my $tagged = 0;
-    my %logs
-        = map {
-            chomp;
-            my ($hash, $blt) = split /\s[(]/, $_;
-            $blt ||= '';
-            chop $blt;
-            my $tag = join ', ', grep { $tags{$_} } split /,\s+/, $blt;
-            $count++;
-            my $min = !$tagged++;
-            #warn "$name\t$count\n" if $min;
+    my $i = 0;
+    my @logs = `git log --format=format:'%h %d'`;
+    my %logs;
+    for (@logs) {
+        $i++;
+        chomp;
+        my ($hash, $blt) = split /\s[(]/, $_;
+        $blt ||= '';
+        chop $blt;
+        my $tag = join ', ', grep { $tags{$_} } map {s/^tag:\s+//, $_}  split /,\s+/, $blt;
+        $count++;
+        my $min = !$tagged;
+        $tagged++ if $tag;
 
-            if ($min) {
-                return ( $hash => $tag ? $tag . colored(" ($count)", 'green' ) : '' );
-            }
-            return () if !$opt->opt->min;
-
-            return ( $hash => $tag ? "$tag ($count)" : '' )
-        }
-        `git log --format=format:'%h %d'`;
+        $logs{$hash} = $tag ? $tag . colored(" ($count)", $min ? 'green' : '' ) : '';
+        last if $tag && $opt->opt->min;
+    }
 
     %logs
         = map {
@@ -118,15 +116,13 @@ Group::Git::Cmd::Tag - <One-line description of module's purpose>
 
 This documentation refers to Group::Git::Cmd::Tag version 0.0.1
 
-
 =head1 SYNOPSIS
 
-   use Group::Git::Cmd::Tag;
+   group-git tag [options]
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+ Options:
+    -m --min        Show only tag with minimum number of commits
+    -v --verbose    Show more details about tags
 
 =head1 DESCRIPTION
 
