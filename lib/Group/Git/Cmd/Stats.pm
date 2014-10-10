@@ -49,13 +49,13 @@ sub stats {
 
     $opt->process if !%{ $opt->opt || {} };
 
-    my $cmd = qq{git log --format=format:' %h|%s|%an|%ci'};
+    my $cmd = qq{git log --format=format:' %h=|=%s=|=%an=|=%ci'};
     my @commits = `$cmd`;
     my %stats;
 
     for my $commit (@commits) {
-        my ($hash, $subject, $user, $time) = split /[|]/, $commit;
-        $time = $strp->parse_datetime($time);
+        my ($hash, $subject, $user, $time) = split /=[|]=/, $commit;
+        $time = $strp->parse_datetime($time) || die "Can't parse the time $time!\nFrom:\n$commit\n";
         my $stat = $time->clone;
         $stat->truncate( to => $opt->opt->bin );
         push @{$stats{$stat}}, {
