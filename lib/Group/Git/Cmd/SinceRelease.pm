@@ -24,6 +24,21 @@ sub since_release {
     local $CWD = $name;
 
     # find the newest tag and count newer commits
+    my @tags = map {/(.*)$/; $1} `git tag`;
+    return if !@tags;
+
+    my ($sha, $time) = split /\s+/, `git log -n 1 --format=format:'%H %at' $tags[-1]`;
+
+    my @logs  = `git log -n 100 --format=format:'%H'`;
+    my $count = -1;
+    for my $log (@logs) {
+        $count++;
+        chomp $log;
+        last if $log eq $sha;
+    }
+
+    return if $count < 1;
+    return "Commits since last release: $count\n";
 }
 
 1;
