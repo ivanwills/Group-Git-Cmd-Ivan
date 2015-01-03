@@ -14,7 +14,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 
-our $VERSION     = version->new('0.0.1');
+our $VERSION = version->new('0.0.1');
 
 sub build { shift->_builder( 'builder', 'Build.PL', @_ ) }
 sub mvn   { shift->_builder( 'mvn'    , 'pom.xml' , @_ ) }

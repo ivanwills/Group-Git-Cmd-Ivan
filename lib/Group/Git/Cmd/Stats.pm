@@ -16,10 +16,7 @@ use DateTime::Format::Strptime qw/strptime/;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION     = version->new('0.0.1');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.0.1');
 
 my $strp = DateTime::Format::Strptime->new(
     pattern   => '%F %T %z',
@@ -28,10 +25,9 @@ my $strp = DateTime::Format::Strptime->new(
 );
 my $opt = Getopt::Alt->new(
     {
-        bundle      => 1,
-        help        => __PACKAGE__,
-        ignore_case => 0,
-        default     => {
+        helper  => 1,
+        help    => __PACKAGE__,
+        default => {
             bin => 'month'
         },
     },

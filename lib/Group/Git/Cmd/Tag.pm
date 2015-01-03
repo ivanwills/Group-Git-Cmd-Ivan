@@ -20,9 +20,8 @@ our $VERSION = version->new('0.0.1');
 
 my $opt = Getopt::Alt->new(
     {
-        bundle      => 1,
-        help        => __PACKAGE__,
-        ignore_case => 0,
+        helper => 1,
+        help   => __PACKAGE__,
     },
     [
         'min|m',
