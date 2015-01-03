@@ -16,10 +16,26 @@ use File::chdir;
 
 our $VERSION     = version->new('0.0.1');
 
+my $opt = Getopt::Alt->new(
+    {
+        helper  => 1,
+        help    => __PACKAGE__,
+        default => {
+            min => 1,
+        },
+    },
+    [
+        'min|min-commits|m=i',
+        'verbose|v+',
+    ]
+);
+
 sub since_release {
     my ($self, $name) = @_;
 
     return unless -d $name;
+
+    $opt->process if !%{ $opt->opt || {} };
 
     local $CWD = $name;
 
@@ -37,7 +53,7 @@ sub since_release {
         last if $log eq $sha;
     }
 
-    return if $count < 1;
+    return if $count < $opt->opt->min && !$opt->opt->verbose;
     return "Commits since last release: $count\n";
 }
 
@@ -53,15 +69,18 @@ Group::Git::Cmd::SinceRelease - Gets the number of commits each repository is ah
 
 This documentation refers to Group::Git::Cmd::SinceRelease version 0.0.1
 
-
 =head1 SYNOPSIS
 
-   use Group::Git::Cmd::SinceRelease;
+   group-git since-release [options]
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+   Options:
+    -m --min-commits[=]int
+                    Set the minimum number of commits to be found since the
+                    last release (ie tag) before the results are shown.
+                    (Default 1)
+    -v --verbose    Show all repository results.
+       --help       Show this documentation
+       --man        Show full documentation
 
 =head1 DESCRIPTION
 
