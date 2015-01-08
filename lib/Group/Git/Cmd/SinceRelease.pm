@@ -27,6 +27,7 @@ my $opt = Getopt::Alt->new(
     [
         'min|min-commits|m=i',
         'verbose|v+',
+        'quiet|q!',
     ]
 );
 
@@ -54,7 +55,8 @@ sub since_release {
     }
 
     return if $count < $opt->opt->min && !$opt->opt->verbose;
-    return "Commits since last release: $count\n";
+    my $text = $opt->opt->quiet ? '' : "Commits since last release: ";
+    return "$text$count\n";
 }
 
 1;
