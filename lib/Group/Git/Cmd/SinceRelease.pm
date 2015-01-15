@@ -26,6 +26,7 @@ my $opt = Getopt::Alt->new(
     },
     [
         'min|min-commits|m=i',
+        'name|n',
         'verbose|v+',
         'quiet|q!',
     ]
@@ -55,7 +56,9 @@ sub since_release {
     }
 
     return if $count < $opt->opt->min && !$opt->opt->verbose;
-    my $text = $opt->opt->quiet ? '' : "Commits since last release: ";
+    my $text = $opt->opt->quiet ? '' : "Commits since last release";
+    $text .= $opt->opt->name ? " ($tags[-1]): " : ': ';
+
     return "$text$count\n";
 }
 
@@ -80,6 +83,8 @@ This documentation refers to Group::Git::Cmd::SinceRelease version 0.0.1
                     Set the minimum number of commits to be found since the
                     last release (ie tag) before the results are shown.
                     (Default 1)
+    -n --name       Show the last release's name (ignored if --quiet used)
+    -q --quiet      Just show the number of commits since the last release
     -v --verbose    Show all repository results.
        --help       Show this documentation
        --man        Show full documentation
