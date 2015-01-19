@@ -113,6 +113,18 @@ This documentation refers to Group::Git::Cmd::Stats version 0.0.1
 
 =head1 SUBROUTINES/METHODS
 
+=over 4
+
+=item stats
+
+Get repository stats
+
+=item stats_end
+
+Output the collated stats
+
+=back
+
 =head1 DIAGNOSTICS
 
 =head1 CONFIGURATION AND ENVIRONMENT
