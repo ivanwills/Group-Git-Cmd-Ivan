@@ -1,8 +1,14 @@
-Group-Git-Cmd-Ivan
+=pod
+
+=begin html
+
+<a href="https://travis-ci.org/ivanwills/Group-Git"><img src="https://travis-ci.org/ivanwills/Group-Git.png" alt="Group-Git"></a>
+
+=head1 Group-Git-Cmd-Ivan
 
 My own command additions to the standard group-git commands.
 
-INSTALLATION
+=head1 INSTALLATION
 
 To install this module, run the following commands:
 
@@ -11,7 +17,7 @@ To install this module, run the following commands:
     ./Build test
     ./Build install
 
-SUPPORT AND DOCUMENTATION
+=head1 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
 perldoc command.
@@ -35,9 +41,9 @@ You can also look for information at:
     Source Code
         git://github.com/ivanwills/Group-Git-Cmd-Ivan.git
 
-COPYRIGHT AND LICENCE
+=head1 COPYRIGHT AND LICENCE
 
-Copyright (C) 2013 Ivan Wills
+Copyright (C) 2013-2014 Ivan Wills
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
@@ -45,3 +51,4 @@ by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
+=cut
