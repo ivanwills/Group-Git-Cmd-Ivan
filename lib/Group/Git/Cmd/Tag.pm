@@ -40,24 +40,17 @@ sub tag {
     my $repo = $self->repos->{$name};
 
     local $CWD = $name;
-    my %tags
-        = map {
-            $_=>1
-        }
-        map {
-            chomp;
-            $_
-        }
-        `git tag`;
-    my %branches
-        = map {
-            $_=>1
-        }
-        map {
-            s/^.*\s//;
-            (split /,\s+/, $_)
-        }
-        `git branch`;
+    my %tags;
+    for my $tag (`git tag`) {
+        chomp $tag;
+        $tags{$tag}++;
+    }
+    my %branches;
+    for my $branch (`git branch`) {
+        chomp $branch;
+        $branch =~ s/^.*\s//;
+        $branches{$branch}++;
+    }
 
     my $count  = 0;
     my $tagged = 0;
@@ -67,10 +60,10 @@ sub tag {
     for (@logs) {
         $i++;
         chomp;
-        my ($hash, $blt) = split /\s[(]/, $_;
-        $blt ||= '';
-        chop $blt;
-        my $tag = join ', ', grep { $tags{$_} } map {s/^tag:\s+//, $_}  split /,\s+/, $blt;
+        my ($hash, $branc_tag) = split /\s[(]/, $_;
+        $branc_tag ||= '';
+        chop $branc_tag;
+        my $tag = join ', ', grep { $tags{$_} } map {/^(?:tag:\s+)?(.*)/; $1}  split /,\s+/, $branc_tag;
         $count++;
         my $min = !$tagged;
         $tagged++ if $tag;
