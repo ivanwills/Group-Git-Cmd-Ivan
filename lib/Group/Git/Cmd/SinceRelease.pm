@@ -91,6 +91,8 @@ This documentation refers to Group::Git::Cmd::SinceRelease version 0.0.1
                     last release (ie tag) before the results are shown.
                     (Default 1)
     -n --name       Show the last release's name (ignored if --quiet used)
+        --no-release
+                    Show only repositories that have never been released (no tags)
     -q --quiet      Just show the number of commits since the last release
     -v --verbose    Show all repository results.
        --help       Show this documentation
