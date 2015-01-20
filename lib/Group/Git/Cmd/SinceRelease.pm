@@ -27,6 +27,7 @@ my $opt = Getopt::Alt->new(
     [
         'min|min-commits|m=i',
         'name|n',
+        'no_release|no-release',
         'verbose|v+',
         'quiet|q!',
     ]
@@ -43,7 +44,13 @@ sub since_release {
 
     # find the newest tag and count newer commits
     my @tags = map {/(.*)$/; $1} `git tag`;
-    return if !@tags;
+    if ($opt->opt->no_release) {
+        return "Never released" if !@tags;
+        return;
+    }
+    elsif (!@tags) {
+        return;
+    }
 
     my ($sha, $time) = split /\s+/, `git log -n 1 --format=format:'%H %at' $tags[-1]`;
 
