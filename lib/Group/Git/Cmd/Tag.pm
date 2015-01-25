@@ -16,7 +16,7 @@ use File::chdir;
 use Term::ANSIColor qw/colored/;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.0.1');
+our $VERSION = version->new('0.0.2');
 
 my $opt = Getopt::Alt->new(
     {
@@ -106,7 +106,7 @@ Group::Git::Cmd::Tag - Finds tags in each repository
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Tag version 0.0.1
+This documentation refers to Group::Git::Cmd::Tag version 0.0.2
 
 =head1 SYNOPSIS
 

@@ -1,5 +1,10 @@
 Revision history for Group-Git-Cmd-Ivan
 
+0.0.2   2015-01-25
+        Updating for release of version 0.0.2
+        Added documentation (Ivan Wills)
+        Added --no-release option for describing branches that have never been released (Ivan Wills)
+
 0.0.1   2013-05-15
         First version, released on an unsuspecting world.
 

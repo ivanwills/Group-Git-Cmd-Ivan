@@ -16,7 +16,7 @@ use DateTime::Format::Strptime qw/strptime/;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.0.1');
+our $VERSION = version->new('0.0.2');
 
 my $strp = DateTime::Format::Strptime->new(
     pattern   => '%F %T %z',
@@ -96,7 +96,7 @@ Group::Git::Cmd::Stats - Show stats (from git log) about all projects
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Stats version 0.0.1
+This documentation refers to Group::Git::Cmd::Stats version 0.0.2
 
 =head1 SYNOPSIS
 
