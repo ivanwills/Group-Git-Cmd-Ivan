@@ -34,7 +34,7 @@ my $opt = Getopt::Alt->new(
     ]
 );
 
-my $todo;
+my $todo = '';
 sub todo {
     my ($self, $name) = @_;
 
@@ -46,11 +46,15 @@ sub todo {
 
     return if !-f 'TODO.md';
 
-    $todo .= "$name\n\n" . path('TODO.md')->slurp;
+    $todo .= "\n# $name\n\n" . path('TODO.md')->slurp;
+
+    return;
 }
 
 sub todo_end {
     print $todo;
+
+    return;
 }
 
 1;
