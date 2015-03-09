@@ -1,1 +1,2 @@
-* Add new command for TODO.md summaries (todo?)
+* Split extra commands into own repositories?
+** This repo to "depend" on the new repos for one place install?
