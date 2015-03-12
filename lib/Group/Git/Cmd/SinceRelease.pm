@@ -66,7 +66,7 @@ sub since_release {
     my $text = $opt->opt->quiet ? '' : "Commits since last release";
     $text .= $opt->opt->name ? " ($tags[-1]): " : ': ';
 
-    return "$text$count\n";
+    return "$text$count";
 }
 
 1;
