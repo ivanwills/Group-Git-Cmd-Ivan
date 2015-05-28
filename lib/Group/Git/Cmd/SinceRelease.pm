@@ -28,6 +28,7 @@ my $opt = Getopt::Alt->new(
         'min|min-commits|m=i',
         'name|n',
         'no_release|no-release',
+        'released|r',
         'verbose|v+',
         'quiet|q!',
     ]
@@ -62,6 +63,11 @@ sub since_release {
         last if $log eq $sha;
     }
 
+    if ($opt->opt->released) {
+        return "Released!" if !$count;
+        return;
+    }
+
     return if $count < $opt->opt->min && !$opt->opt->verbose;
     my $text = $opt->opt->quiet ? '' : "Commits since last release";
     $text .= $opt->opt->name ? " ($tags[-1]): " : ': ';
@@ -93,6 +99,7 @@ This documentation refers to Group::Git::Cmd::SinceRelease version 0.0.2
     -n --name       Show the last release's name (ignored if --quiet used)
         --no-release
                     Show only repositories that have never been released (no tags)
+    -r --released   Show repositories that are currently released.
     -q --quiet      Just show the number of commits since the last release
     -v --verbose    Show all repository results.
        --help       Show this documentation
