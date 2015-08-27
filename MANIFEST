@@ -6,7 +6,6 @@ lib/Group/Git/Cmd/SinceRelease.pm
 lib/Group/Git/Cmd/Stats.pm
 lib/Group/Git/Cmd/Tag.pm
 LICENSE
-Makefile.PL
 MANIFEST
 META.json
 META.yml
