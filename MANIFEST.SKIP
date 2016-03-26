@@ -91,4 +91,6 @@ tags
 \..*\.tag$
 errors.err
 .travis.yml
+.editorconfig
+.vtide.yml
 tags
