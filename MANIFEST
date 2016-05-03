@@ -2,7 +2,6 @@ Build.PL
 Changes
 lib/Group/Git/Cmd/Build.pm
 lib/Group/Git/Cmd/Ivan.pm
-lib/Group/Git/Cmd/SinceRelease.pm
 lib/Group/Git/Cmd/Stats.pm
 lib/Group/Git/Cmd/Tag.pm
 LICENSE
@@ -19,3 +18,4 @@ t/perlcriticrc
 t/pod-coverage.t
 t/pod.t
 t/spelling.t
+TODO.md
