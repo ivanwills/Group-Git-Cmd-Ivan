@@ -60,6 +60,5 @@ subtest 'Changes' => sub {
 
 module_boilerplate_ok('lib/Group/Git/Cmd/Tag.pm');
 module_boilerplate_ok('lib/Group/Git/Cmd/Ivan.pm');
-module_boilerplate_ok('lib/Group/Git/Cmd/Stats.pm');
 module_boilerplate_ok('lib/Group/Git/Cmd/Build.pm');
 done_testing();
